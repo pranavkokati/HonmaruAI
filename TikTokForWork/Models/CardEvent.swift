@@ -28,6 +28,8 @@ struct CardEvent: Identifiable, Decodable, Equatable {
             switch action {
             case "approve": return String(localized: "Approved")
             case "decline": return String(localized: "Declined")
+            case "revised": return String(localized: "Revision requested")
+            case "delegate": return String(localized: "Delegated")
             case "reply": return String(localized: "Replied")
             default: return String(localized: "Decided")
             }

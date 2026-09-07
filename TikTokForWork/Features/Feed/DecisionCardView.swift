@@ -383,15 +383,12 @@ struct DecisionCardView: View {
                         Haptics.light()
                         onAction(.createIssue)
                     } label: {
-                        // Filled dark pill. docs/design-system.md lists "violet
-                        // never fills a primary CTA" under Don'ts (enforced),
-                        // and every button in the system is a pill.
                         Text("Approve")
                             .font(.system(size: 16, weight: .semibold))
                             .frame(maxWidth: .infinity)
                             .frame(height: 48)
-                            .background(Theme.Colors.ctaFill)
-                            .foregroundStyle(Color.white)
+                            .background(Theme.Colors.textPrimary)
+                            .foregroundStyle(Theme.Colors.background)
                             .clipShape(Capsule())
                     }
                 }
