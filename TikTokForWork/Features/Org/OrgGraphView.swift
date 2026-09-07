@@ -10,21 +10,36 @@ struct OrgGraphView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: Theme.Spacing.xl) {
-                    section("People", items: graph.nodes.filter { $0.kind == .person })
-                    section("Agents", items: graph.nodes.filter { $0.kind == .agent })
-                    section("Teams", items: graph.nodes.filter { $0.kind == .team })
-                    section("Projects", items: graph.nodes.filter { $0.kind == .project })
+                    let people = graph.nodes.filter { $0.kind == .person }
+                    let agents = graph.nodes.filter { $0.kind == .agent }
+                    let teams = graph.nodes.filter { $0.kind == .team }
+                    let projects = graph.nodes.filter { $0.kind == .project }
 
-                    VStack(alignment: .leading, spacing: Theme.Spacing.md) {
-                        Text("Relationships")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Theme.Colors.textTertiary)
+                    if !people.isEmpty { section("People", items: people) }
+                    if !agents.isEmpty { section("Agents", items: agents) }
+                    if !teams.isEmpty { section("Teams", items: teams) }
+                    if !projects.isEmpty { section("Projects", items: projects) }
 
-                        ForEach(graph.edges) { edge in
-                            Text(relationshipLabel(for: edge))
-                                .font(.system(size: 13, design: .monospaced))
-                                .foregroundStyle(Theme.Colors.textSecondary)
+                    if !graph.edges.isEmpty {
+                        VStack(alignment: .leading, spacing: Theme.Spacing.md) {
+                            Text("Relationships")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Theme.Colors.textTertiary)
+
+                            ForEach(graph.edges) { edge in
+                                Text(relationshipLabel(for: edge))
+                                    .font(.system(size: 13, design: .monospaced))
+                                    .foregroundStyle(Theme.Colors.textSecondary)
+                            }
                         }
+                    }
+
+                    if graph.nodes.isEmpty {
+                        Text("No organization data yet. Connect GitHub and your team will appear here.")
+                            .font(Theme.TypeScale.caption)
+                            .foregroundStyle(Theme.Colors.textTertiary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.top, Theme.Spacing.xl)
                     }
                 }
                 .padding(Theme.Spacing.screen)
@@ -56,6 +71,7 @@ struct OrgGraphView: View {
                     .padding(.vertical, 10)
                     .padding(.horizontal, Theme.Spacing.md)
                     .background(Theme.Colors.surfaceRaised)
+                    .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sm))
             }
         }
     }

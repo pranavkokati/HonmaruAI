@@ -40,7 +40,6 @@ struct SubscriptionView: View {
                 }
             }
         }
-        .preferredColorScheme(.dark)
         .task { await subscriptions.refresh() }
         // The Customer Center is a full self-service flow — cancel, change plan, request a
         // refund, run a cancellation survey — all configured in the RevenueCat dashboard.

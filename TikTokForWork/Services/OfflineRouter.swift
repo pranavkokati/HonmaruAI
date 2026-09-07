@@ -22,18 +22,10 @@ enum OfflineRouter {
     ) -> InstructionDraft {
         let lower = text.lowercased()
 
-        let recipient: String
-        let reason: String
-        if designWords.contains(where: { lower.contains($0.lowercased()) }) {
-            recipient = "user-yui"
-            reason = String(localized: "Visual work goes to the contractor")
-        } else if clientWords.contains(where: { lower.contains($0.lowercased()) }) {
-            recipient = "user-tanaka"
-            reason = String(localized: "The client has to agree to this")
-        } else {
-            recipient = sender.id
-            reason = String(localized: "This one is yours to decide")
-        }
+        // Without the relay there is no org graph to route against.
+        // File everything to yourself so nothing is lost while offline.
+        let recipient = sender.id
+        let reason = String(localized: "Saved locally — AI routing will apply when back online")
 
         let type: CardType
         if lower.contains("承認") || lower.contains("approve") {

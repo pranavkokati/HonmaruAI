@@ -109,11 +109,8 @@ final class FeedViewModel: ObservableObject {
         do {
             try await cardService.delete(cardID: card.id, actorUserID: userID)
             Haptics.light()
-            refreshCards(from: cardService)
-            if cards.isEmpty {
-                scrollPosition = nil
-            } else if scrollPosition == card.id {
-                scrollPosition = cards[min(currentIndex, cards.count - 1)].id
+            withAnimation(.easeOut(duration: 0.2)) {
+                refreshCards(from: cardService)
             }
         } catch {
             errorMessage = error.localizedDescription

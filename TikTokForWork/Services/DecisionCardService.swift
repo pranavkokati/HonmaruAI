@@ -174,8 +174,9 @@ final class DecisionCardService: ObservableObject {
         }
 
         if let revisionNote, !revisionNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            card.revisionNote = revisionNote.trimmingCharacters(in: .whitespacesAndNewlines)
-            card.context = [card.context, "Revision: \(card.revisionNote!)"].filter { !$0.isEmpty }.joined(separator: "\n")
+            let trimmedNote = revisionNote.trimmingCharacters(in: .whitespacesAndNewlines)
+            card.revisionNote = trimmedNote
+            card.context = [card.context, "Revision: \(trimmedNote)"].filter { !$0.isEmpty }.joined(separator: "\n")
         }
 
         // GitHub is optional: without a connection the decision is still

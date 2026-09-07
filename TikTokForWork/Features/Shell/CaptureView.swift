@@ -114,6 +114,7 @@ struct CaptureView: View {
                 .font(.system(size: 15))
                 .opacity(0)
                 .disabled(true)
+                .accessibilityHidden(true)
         }
         .padding(.horizontal, Theme.Spacing.md)
         .padding(.top, Theme.Spacing.sm)
@@ -121,7 +122,7 @@ struct CaptureView: View {
 
     private var transcriptPanel: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
-            Text("Listening")
+            Text(dictation.isRecording ? "Listening" : "Tap mic to start")
                 .font(.system(size: 10, weight: .medium, design: .monospaced))
                 .tracking(1.2)
                 .foregroundStyle(.white.opacity(0.45))
