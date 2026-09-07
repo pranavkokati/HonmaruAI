@@ -142,7 +142,6 @@ final class FeedViewModel: ObservableObject {
             withAnimation(.easeOut(duration: 0.2)) {
                 refreshCards(from: cardService)
             }
-            advanceIfNeeded()
         } catch {
             errorMessage = error.localizedDescription
             Haptics.light()
@@ -253,7 +252,6 @@ final class FeedViewModel: ObservableObject {
             withAnimation(.easeOut(duration: 0.2)) {
                 refreshCards(from: cardService)
             }
-            advanceIfNeeded()
             // Deciding is a local state change; reconciling with GitHub is
             // bookkeeping. Awaiting it here made every approval wait on the
             // network, which is exactly the moment the app should feel instant.
@@ -285,6 +283,9 @@ final class FeedViewModel: ObservableObject {
     private func refreshCards(from service: DecisionCardService) {
         guard let userID else { return }
         let previousCount = cards.count
+        // Capture the current index BEFORE mutating cards so the position
+        // survives the update when the current card is removed.
+        let previousIndex = currentIndex
         let updated = service.cards(for: userID)
         cards = updated
 
@@ -294,19 +295,11 @@ final class FeedViewModel: ObservableObject {
             scrollPosition = newest
         } else if let scrollPosition, updated.contains(where: { $0.id == scrollPosition }) {
             return
-        } else if currentIndex < updated.count {
-            self.scrollPosition = updated[currentIndex].id
         } else {
-            scrollPosition = updated.first?.id
-        }
-    }
-
-    private func advanceIfNeeded() {
-        let index = currentIndex
-        if index < cards.count - 1 {
-            withAnimation(.easeOut(duration: 0.25)) {
-                scrollPosition = cards[index + 1].id
-            }
+            // Current card was removed: advance to the card that took its place,
+            // or to the last card if it was already the last one.
+            let targetIndex = min(previousIndex, updated.count - 1)
+            self.scrollPosition = updated[targetIndex].id
         }
     }
 }

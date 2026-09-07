@@ -101,13 +101,10 @@ struct FeedView: View {
         .onAppear {
             cardCount.wrappedValue = viewModel.cards.count
             currentCardIndex.wrappedValue = viewModel.currentIndex
-            guard let user = appState.currentUser else { return }
-            viewModel.bind(
-                to: appState.cardService,
-                user: user,
-                githubService: appState.githubService
-            )
-            Task { await viewModel.syncGitHub() }
+            bindIfReady()
+        }
+        .onChange(of: appState.currentUser?.id) { _, _ in
+            bindIfReady()
         }
         .sheet(isPresented: $showOrgGraph) {
             OrgGraphView()
@@ -359,6 +356,16 @@ struct FeedView: View {
         case .connected:
             String(localized: "No decisions yet. Tell your AI something, or wait for a teammate.")
         }
+    }
+
+    private func bindIfReady() {
+        guard let user = appState.currentUser else { return }
+        viewModel.bind(
+            to: appState.cardService,
+            user: user,
+            githubService: appState.githubService
+        )
+        Task { await viewModel.syncGitHub() }
     }
 
     private func disconnect() {

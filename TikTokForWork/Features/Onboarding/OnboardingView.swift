@@ -337,13 +337,21 @@ struct OnboardingView: View {
             }
 
             if appState.githubService.repositories.isEmpty {
-                Text(isRefreshingRepos ? String(localized: "Loading repositories…") : String(localized: "No repositories found"))
-                    .font(Theme.TypeScale.caption)
-                    .foregroundStyle(Theme.Colors.textSecondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(Theme.Spacing.md)
-                    .background(Theme.Colors.surfaceRaised)
-                    .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.md))
+                VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+                    Text(isRefreshingRepos ? String(localized: "Loading repositories…") : String(localized: "No repositories found"))
+                        .font(Theme.TypeScale.caption)
+                        .foregroundStyle(Theme.Colors.textSecondary)
+                    if !isRefreshingRepos {
+                        Text("Create a repository on GitHub, then tap the refresh button above.")
+                            .font(Theme.TypeScale.micro)
+                            .foregroundStyle(Theme.Colors.textTertiary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(Theme.Spacing.md)
+                .background(Theme.Colors.surfaceRaised)
+                .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.md))
             } else {
                 Picker("Repository", selection: $selectedRepository) {
                     Text("Select").tag(Optional<GitHubRepository>.none)

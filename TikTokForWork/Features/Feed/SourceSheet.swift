@@ -87,8 +87,8 @@ struct SourceSheet: View {
 
     private var email: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
-            field(String(localized: "From"), "\(card.senderName) <\(handle)@example.com>")
-            field(String(localized: "To"), "toru@honmaru.jp")
+            field(String(localized: "From"), card.senderName)
+            field(String(localized: "To"), String(localized: "You"))
             field(String(localized: "Subject"), detail ?? card.title)
             Text(originalText)
                 .font(.system(size: 15))

@@ -110,6 +110,7 @@ struct YouView: View {
                 .presentationDetents([.medium, .large])
                 .presentationBackground(Theme.Colors.surface)
         }
+        .toolbar(.hidden, for: .navigationBar)
         } // NavigationStack
     }
 
