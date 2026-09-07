@@ -150,7 +150,7 @@ struct SourceSheet: View {
     }
 
     private var footnote: some View {
-        Text("This screen is a demo reproduction. In a real integration, the original tool opens.")
+        Text("This is a preview of the source content. Open the original in \(app) to view it in full.")
             .font(Theme.TypeScale.micro)
             .foregroundStyle(Theme.Colors.textTertiary)
             .padding(.top, Theme.Spacing.md)
